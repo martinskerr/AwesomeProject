@@ -1,5 +1,5 @@
 import { StyleSheet, Platform, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './src/components/header';
 import Timer from './src/components/Timer';
 import {Audio} from "expo-av"
@@ -13,10 +13,30 @@ export default function App() {
   const [time, setTime] = useState(25 * 60);
   const [currentTime, setCurrentTime] = useState("POMO" | "SHORT" | "BREAK" );
   const [isActive, setIsActive] = useState(false);
-  
-  function handlerStartStop(){
+
+  useEffect(()=>{
+    let interval = null;
+
+    if(isActive){
+      interval = setInterval(()=>{
+        setTime(time - 1)
+      }, 10)
+    }
+    else{
+      clearInterval(interval)
+    }
+    if (time === 0) {
+      setIsActive(false);
+      setIsWorking(!isWorking);
+      setTime(isWorking ? 300 : 1500); // 5 minutes for short break, 25 minutes for pomodoro
+    }
+
+    return () => clearInterval(interval);
+  }, [isActive, time]);
+
+  const handlerStartStop = () => {
     playSound();
-    setIsActive(!isActive);
+    setIsActive((prev) => !prev);
   };
   
   async function playSound(){
