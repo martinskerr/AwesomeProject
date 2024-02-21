@@ -1,20 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Platform, Text, View, SafeAreaView } from 'react-native';
+import { useState } from 'react';
+
+
+const colors = ["#F7DC6F", "#A2D9CE", "#D7BDE2"]
 
 export default function App() {
+
+  const [isWorking, setIsWorking] = useState(false);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={{paddingTop: Platform.OS === "android" && 30}}>
+        <Text style={styles.text}>Pomodo App</Text>
+      </View>
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
+  text:{
+    fontSize:32, 
+    fontWeight:"bold"
+  }
 });
